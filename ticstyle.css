@@ -152,6 +152,22 @@ a {
   z-index: -2;
 }
 
+.hero-light {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,70,70,0.15), transparent 70%);
+  filter: blur(90px);
+  animation: moveLight 12s infinite alternate ease-in-out;
+  z-index: -1;
+}
+
+@keyframes moveLight {
+  0% { transform: translate(-20%, -20%); }
+  100% { transform: translate(20%, 20%); }
+}
+
+
 /* Fix for logo container hover animation */
 .logo-container {
   position: relative;
@@ -418,6 +434,11 @@ a {
     width: 250px;
   }
 }
+
+.album:hover img {
+  transform: scale(1.05) translateY(-5px);
+}
+
 
 /* Desktop */
 @media (max-width: 1199px) {

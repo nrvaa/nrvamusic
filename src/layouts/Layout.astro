@@ -1,3 +1,6 @@
+---
+import { ClientRouter } from 'astro:transitions';
+---
 <!doctype html>
 <html lang="en">
 	<head>
@@ -12,6 +15,7 @@
 		/>
 		<meta name="theme-color" content="#120c10" />
 		<title>Home — NRVA</title>
+		<ClientRouter />
 		
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -100,6 +104,7 @@ html, body {
 	font-family: var(--font-body);
 	line-height: 1.5;
 	overflow-x: clip; /* Required for Hallmark responsiveness */
+	scroll-behavior: smooth;
 	-webkit-font-smoothing: antialiased;
 }
 

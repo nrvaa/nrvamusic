@@ -1,0 +1,22 @@
+{
+  "builds": [
+    {
+      "timestamp": "2026-06-26T08:00:00Z",
+      "genre": "atmospheric",
+      "macrostructure": "03-marquee-hero",
+      "theme": "custom",
+      "palette_anchor": "oklch(60% 0.20 350)",
+      "vibe_prompt": "late-night, neon, immersive club, broken glass",
+      "fonts": {
+        "display": "Inter",
+        "body": "Inter",
+        "mono": "DM Mono"
+      },
+      "archetypes": {
+        "nav": "n5-floating-pill",
+        "hero": "h1-marquee",
+        "footer": "ft5-statement"
+      }
+    }
+  ]
+}

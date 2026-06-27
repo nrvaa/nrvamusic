@@ -1,0 +1,439 @@
+---
+import { ClientRouter } from 'astro:transitions';
+const { 
+	title = "NRVA — Electronic Music", 
+	description = "NRVA — electronic music for the fractured mind. Listen to the latest releases.", 
+	image = "/mhisq.webp" 
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://www.nrvamusic.com");
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="theme-color" content="#120c10" />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL(image, Astro.site || "https://www.nrvamusic.com")} />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={Astro.url} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={new URL(image, Astro.site || "https://www.nrvamusic.com")} />
+
+		<ClientRouter />
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=DM+Mono:wght@300;400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+		
+		<!-- Early theme init to prevent FOUC -->
+		<script is:inline>
+			(function() {
+				const currentTheme = localStorage.getItem('theme');
+				if (currentTheme === 'light') {
+					document.documentElement.setAttribute('data-theme', 'light');
+				} else if (!currentTheme && window.matchMedia('(prefers-color-scheme: light)').matches) {
+					document.documentElement.setAttribute('data-theme', 'light');
+				}
+			})();
+		</script>
+	</head>
+	<body>
+		<!-- Global Mesh Texture -->
+		<svg width="0" height="0" style="position: absolute; overflow: hidden;" aria-hidden="true">
+			<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /></filter>
+		</svg>
+		<div class="global-grain" aria-hidden="true"></div>
+
+		<!-- Animated background canvas -->
+		<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+		<slot />
+
+		<!-- Lenis Init -->
+		<script is:inline>
+			let lenis;
+			let rafId;
+			document.addEventListener("astro:page-load", () => {
+				if (lenis) lenis.destroy();
+				if (rafId) cancelAnimationFrame(rafId);
+
+				lenis = new Lenis({
+					lerp: 0.1,
+					wheelMultiplier: 1,
+					smoothWheel: true,
+					smoothTouch: false,
+					touchMultiplier: 2,
+					infinite: false,
+				})
+				
+				function raf(time) {
+					lenis.raf(time)
+					rafId = requestAnimationFrame(raf)
+				}
+				rafId = requestAnimationFrame(raf)
+			});
+		</script>
+
+		<!-- Animated Background -->
+		<script is:inline>
+			let bgRafId;
+			document.addEventListener('astro:page-load', () => {
+				if (bgRafId) cancelAnimationFrame(bgRafId);
+
+				const canvas = document.getElementById('bgCanvas');
+				if (!canvas) return;
+				const ctx = canvas.getContext('2d');
+
+				function resize() {
+					canvas.width = window.innerWidth;
+					canvas.height = window.innerHeight;
+				}
+				resize();
+				window.addEventListener('resize', resize);
+
+				// Stars
+				const stars = Array.from({ length: 180 }, () => ({
+					x: Math.random(),
+					y: Math.random(),
+					r: Math.random() * 1.2 + 0.2,
+					speed: Math.random() * 0.00008 + 0.00003,
+					opacity: Math.random() * 0.6 + 0.1,
+					twinkleSpeed: Math.random() * 0.02 + 0.005,
+					twinklePhase: Math.random() * Math.PI * 2,
+				}));
+
+				// Nebula orbs
+				const orbs = [
+					{ x: 0.75, y: 0.15, r: 0.35, color: [30, 15, 80], speed: 0.00004, phase: 0 },
+					{ x: 0.15, y: 0.75, r: 0.4,  color: [10, 20, 100], speed: 0.00003, phase: 2.1 },
+					{ x: 0.5,  y: 0.5,  r: 0.25, color: [60, 5, 60], speed: 0.00006, phase: 4.2 },
+					{ x: 0.85, y: 0.85, r: 0.3,  color: [5, 30, 90],  speed: 0.00005, phase: 1.0 },
+				];
+
+				let t = 0;
+				let isLight = false;
+
+				function checkTheme() {
+					isLight = document.documentElement.getAttribute('data-theme') === 'light';
+				}
+
+				function draw(ts) {
+					checkTheme();
+					t = ts;
+					const W = canvas.width;
+					const H = canvas.height;
+
+					// Base background
+					if (isLight) {
+						ctx.fillStyle = '#F0F0FA';
+						ctx.fillRect(0, 0, W, H);
+					} else {
+						// Deep space gradient base
+						const bg = ctx.createLinearGradient(0, 0, W, H);
+						bg.addColorStop(0,   '#08060f');
+						bg.addColorStop(0.4, '#0d0a1a');
+						bg.addColorStop(0.7, '#090714');
+						bg.addColorStop(1,   '#0a0810');
+						ctx.fillStyle = bg;
+						ctx.fillRect(0, 0, W, H);
+
+						// Nebula orbs
+						for (const orb of orbs) {
+							const px = orb.x + Math.sin(t * orb.speed + orb.phase) * 0.08;
+							const py = orb.y + Math.cos(t * orb.speed * 1.3 + orb.phase) * 0.06;
+							const grad = ctx.createRadialGradient(
+								px * W, py * H, 0,
+								px * W, py * H, orb.r * Math.max(W, H)
+							);
+							const [r, g, b] = orb.color;
+							grad.addColorStop(0, `rgba(${r},${g},${b},0.18)`);
+							grad.addColorStop(0.5, `rgba(${r},${g},${b},0.06)`);
+							grad.addColorStop(1, 'rgba(0,0,0,0)');
+							ctx.fillStyle = grad;
+							ctx.fillRect(0, 0, W, H);
+						}
+
+						// Stars
+						for (const s of stars) {
+							s.twinklePhase += s.twinkleSpeed;
+							const twinkle = 0.5 + 0.5 * Math.sin(s.twinklePhase);
+							const sx = (s.x * W + t * s.speed * W) % W;
+							const sy = s.y * H;
+							ctx.beginPath();
+							ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+							ctx.fillStyle = `rgba(200,210,255,${s.opacity * twinkle})`;
+							ctx.fill();
+						}
+
+						// Subtle horizontal scan line
+						const scanY = (t * 0.02) % H;
+						const scanGrad = ctx.createLinearGradient(0, scanY - 2, 0, scanY + 2);
+						scanGrad.addColorStop(0, 'rgba(100,80,200,0)');
+						scanGrad.addColorStop(0.5, 'rgba(100,80,200,0.04)');
+						scanGrad.addColorStop(1, 'rgba(100,80,200,0)');
+						ctx.fillStyle = scanGrad;
+						ctx.fillRect(0, scanY - 2, W, 4);
+					}
+
+					bgRafId = requestAnimationFrame(draw);
+				}
+
+				bgRafId = requestAnimationFrame(draw);
+			});
+		</script>
+	</body>
+</html>
+
+<style is:global>
+/* Hallmark · genre: atmospheric · macrostructure: Marquee Hero · theme: custom · vibe: "late-night, neon, immersive club, fractured"
+ * paper: oklch(14% 0.015 350) · accent: oklch(60% 0.20 350)
+ * display: Inter · body: Inter · axes: dark / geometric-sans / chromatic-other (electric magenta)
+ * studied: no · context: explicit
+ */
+
+:root {
+	/* Default Dark Mode (Blue and Black) - Neumorphism */
+	--color-paper: #12141c;
+	--color-paper-2: #1a1d27;
+	--color-ink: #f1f2f6;
+	--color-ink-2: #ced6e0;
+	--color-rule: #2f3542;
+	--color-muted: #747d8c;
+	--color-accent: #1e90ff; /* Blue Accent */
+	--color-accent-ink: #ffffff;
+	--color-focus: #70a1ff;
+
+	/* Neumorphic Shadows (Dark) */
+	--shadow-light: rgba(255, 255, 255, 0.05);
+	--shadow-dark: rgba(0, 0, 0, 0.6);
+	
+	--neumorph-out: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+	--neumorph-out-sm: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+	--neumorph-in: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+	--neumorph-in-sm: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+	--neumorph-flat: 0px 0px 0px var(--shadow-dark), 0px 0px 0px var(--shadow-light);
+
+	/* Typography */
+	--font-display: 'Inter', sans-serif;
+	--font-body: 'Inter', sans-serif;
+	--font-mono: 'DM Mono', monospace;
+
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-md: 1.125rem;
+	--text-lg: 1.375rem;
+	--text-xl: 1.75rem;
+	--text-2xl: 2.25rem;
+	--text-3xl: 3rem;
+	--text-hero: clamp(2.5rem, 6vw, 6rem);
+
+	/* Spacing */
+	--space-3xs: 0.25rem;
+	--space-2xs: 0.5rem;
+	--space-xs: 0.75rem;
+	--space-sm: 1rem;
+	--space-md: 1.5rem;
+	--space-lg: 2rem;
+	--space-xl: 3rem;
+	--space-2xl: 4.5rem;
+	--space-3xl: 7rem;
+	--space-4xl: 10rem;
+
+	/* Motion & Shape */
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--dur-short: 220ms;
+	--dur-medium: 400ms;
+	--dur-long: 800ms;
+	--radius-card: 24px;
+	--radius-pill: 9999px;
+	--radius-sm: 8px;
+	--radius-lg: 16px;
+}
+
+:root[data-theme="light"] {
+	/* Light Mode (Red and White) */
+	--color-paper: #F8F8FF; /* User Requested White */
+	--color-paper-2: #e8e8ed;
+	--color-ink: #2d3436;
+	--color-ink-2: #636e72;
+	--color-rule: #d1d9e6;
+	--color-muted: #b2bec3;
+	--color-accent: #C00021; /* User Requested Red */
+	--color-accent-ink: #ffffff;
+	--color-focus: #ff6b81;
+
+	/* Neumorphic Shadows (Light) */
+	--shadow-light: #ffffff;
+	--shadow-dark: #aeaec0;
+}
+
+:root[data-theme="light"] .hero-wordmark-svg {
+	filter: invert(1);
+}
+
+/* Background canvas */
+#bgCanvas {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -2;
+	pointer-events: none;
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	min-height: 100%;
+	background-color: transparent;
+	color: var(--color-ink);
+	font-family: var(--font-body);
+	line-height: 1.5;
+	overflow-x: clip; /* Required for Hallmark responsiveness */
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Base typography */
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-display);
+	font-weight: 600;
+	margin: 0;
+	line-height: 1.1;
+	letter-spacing: -0.03em;
+	font-style: normal; /* Hallmark: Italics in headers banned */
+	overflow-wrap: anywhere;
+	min-width: 0;
+}
+
+p {
+	margin: 0;
+	color: var(--color-ink-2);
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	transition: color var(--dur-short) var(--ease-out);
+}
+
+a:hover {
+	color: var(--color-accent);
+}
+
+a:focus-visible, button:focus-visible {
+	outline: 2px solid var(--color-focus);
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+
+/* Atmospheric blooms */
+.atmospheric-bloom {
+	position: fixed;
+	width: 60vw;
+	height: 60vw;
+	border-radius: 50%;
+	background: radial-gradient(circle at center, var(--color-accent) 0%, transparent 70%);
+	opacity: 0.06;
+	pointer-events: none;
+	z-index: -1;
+	filter: blur(80px);
+	animation: floatBloom 20s infinite alternate ease-in-out;
+}
+
+.bloom-top-right {
+	top: -20vw;
+	right: -10vw;
+	animation-delay: -5s;
+}
+
+.bloom-bottom-left {
+	bottom: -20vw;
+	left: -20vw;
+	animation-duration: 25s;
+}
+
+@keyframes floatBloom {
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 0.06;
+	}
+	50% {
+		opacity: 0.1;
+	}
+	100% {
+		transform: translate(5vw, 10vw) scale(1.15);
+		opacity: 0.06;
+	}
+}
+
+/* Global utility classes */
+.global-grain {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	pointer-events: none;
+	opacity: 0.06;
+	filter: url(#grain);
+	mix-blend-mode: overlay;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-inline: clamp(1rem, 4vw, 1.5rem);
+}
+
+.reveal-on-scroll {
+	opacity: 0;
+	filter: blur(16px);
+	transform: translateY(20px);
+	transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out), filter 1.2s var(--ease-out);
+}
+
+.reveal-on-scroll.is-visible {
+	opacity: 1;
+	filter: blur(0px);
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+	}
+	#bgCanvas { display: none; }
+}
+</style>

@@ -1,0 +1,360 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+---
+
+<Layout
+  title="CORE — NRVA"
+  description="The Sundering: Read the decrypted archives and lore of NRVA. The Falsebearers, The Veilwalkers, and The Witnesses."
+>
+  <Navbar />
+
+  <main
+    class="container section-pad"
+    style="padding-top: 140px; max-width: 800px; margin: 0 auto;"
+  >
+    <section id="lore-page">
+      <div class="lore-container">
+        <span class="lore-eyebrow mono-text" id="typed-lore"></span>
+        <h1 class="lore-title">The Sundering</h1>
+        <div
+          class="rule-hairline"
+          style="margin: var(--space-md) 0 var(--space-xl);"
+        >
+        </div>
+
+        <div class="lore-content">
+          <p>
+            It begins with a quiet fracture. A sudden realization of being
+            entirely left behind by the world, accompanied by a paralyzing fear
+            of the future. We document this absolute zero point as
+            <strong style="color: var(--color-ink);"> The Sundering</strong>.
+          </p>
+          <p>
+            In the aftermath of the collapse, the fractured consciousness did
+            not shatter randomly. It divided into three distinct paths. Three
+            covenants formed by the mind to survive the psychological void.
+          </p>
+          <div
+            class="rule-hairline"
+            style="margin: var(--space-lg) 0; opacity: 0.5;"
+          >
+          </div>
+          <p>
+            <strong style="color: var(--color-ink);"
+              >I. THE ILLUMINATE COVENANT (The Falsebearers)</strong
+            ><br />
+            Unable to process the weight of trauma, this faction surrendered to the
+            illusion of happiness. They constructed artificial havens of light and
+            looping nostalgia. Through constructs like <span class="highlight"
+              >ILLUMINATE</span
+            >, they numb the pain, trapping themselves in a beautiful, endless
+            sleep. They refuse to wake up.
+          </p>
+          <p>
+            <strong style="color: var(--color-ink);"
+              >II. THE MONOCHROME SANCTUM (The Veilwalkers)</strong
+            ><br />
+            They rejected the illusion, choosing instead to walk through the agonizing
+            truth. This faction embraces the painful reality of the present. Wandering
+            through a
+            <span class="highlight"> MONOCHROME</span> world, they bear the heavy
+            silence of isolation, understanding that the true weight of loss is only
+            felt the moment it slips through your fingers — existing in a perpetual
+            state of <span class="highlight">UNTIL I LOSE YOU</span>.
+          </p>
+          <p>
+            <strong style="color: var(--color-ink);"
+              >III. THE SUNRISE (The Witnesses)</strong
+            ><br />
+            The final faction. The silent observers waiting at the edge of the dark.
+            They do not hide in false light, nor do they drown in the bleakness. They
+            endure, holding onto the absolute truth that no matter how long the night
+            lasts, hope is inevitable. They stand still, watching for the first signal
+            of light.
+            <!-- </p>
+
+          <blockquote class="lore-quote">
+            "To escape the void, one must first be willing to witness it."
+          </blockquote>
+
+          <p> -->
+            Among these three forces emerges <strong
+              style="color: var(--color-ink);"
+            >
+              NRVA, The Messenger</strong
+            >. NRVA is not a savior, but the absolute life force — tasked with
+            documenting this war of the mind through cinematic soundscapes and
+            driving rhythms. Every track is a decrypted file recovered from the
+            ruins, mapping the journey from the fracture toward the inevitable
+            sunrise.
+          </p>
+
+          <div class="archive-section" style="margin-top: var(--space-3xl);">
+            <span class="archive-heading mono-text"
+              >&gt; DECRYPTED ARCHIVES_</span
+            >
+            <div class="archive-grid">
+              <div class="archive-file unlocked">
+                <div class="file-header">
+                  <span class="file-id">FRAG_001</span>
+                  <span class="file-name">Until I Lose You</span>
+                  <span class="file-status">[ DECRYPTED ]</span>
+                </div>
+                <div class="file-body">
+                  <p>
+                    The first stage of The Sundering. An anthem for those in
+                    profound longing. It is the agonizing realization that the
+                    true weight of a connection is only felt the moment it slips
+                    through your fingers. The fear of being entirely left behind
+                    begins here, forcing the mind to desperately hold onto
+                    fading signals.
+                  </p>
+                </div>
+              </div>
+
+              <div class="archive-file unlocked">
+                <div class="file-header">
+                  <span class="file-id">FRAG_002</span>
+                  <span class="file-name">Sweet Synthetic Memory</span>
+                  <span class="file-status">[ DECRYPTED ]</span>
+                </div>
+                <div class="file-body">
+                  <p>
+                    When the present becomes too hostile, the mind constructs
+                    its own haven. Sweet Synthetic Memory is the core
+                    architecture of this delusion — a fabricated nostalgia, a
+                    perfect looping simulation of a past that may never have
+                    existed. It numbs the trauma, but traps the host in a
+                    beautiful, endless sleep. Wake up.
+                  </p>
+                </div>
+              </div>
+
+              <div class="archive-file locked">
+                <div class="file-header">
+                  <span class="file-id">FRAG_003</span>
+                  <span class="file-name">UNAVAILABLE_DATA</span>
+                  <span class="file-status">[ ENCRYPTED ]</span>
+                </div>
+              </div>
+
+              <div class="archive-file locked">
+                <div class="file-header">
+                  <span class="file-id">FRAG_004</span>
+                  <span class="file-name">CORRUPTED_SECTOR</span>
+                  <span class="file-status">[ ACCESS DENIED ]</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="realityToast" class="reality-toast"></div>
+</Layout>
+
+<style>
+  /* Core Page Specific Styles */
+  .lore-title {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-md);
+  }
+  .lore-eyebrow {
+    color: var(--color-accent);
+    font-size: var(--text-sm);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: var(--space-sm);
+    min-height: 20px;
+  }
+
+  .lore-content {
+    font-size: var(--text-lg);
+    line-height: 1.8;
+    color: var(--color-ink-2);
+  }
+  .lore-content p {
+    margin-bottom: var(--space-lg);
+  }
+  .highlight {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .lore-quote {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--color-ink);
+    border-left: 2px solid var(--color-accent);
+    padding-left: var(--space-md);
+    margin: var(--space-2xl) 0;
+    line-height: 1.4;
+  }
+
+  .archive-heading {
+    display: block;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-md);
+    letter-spacing: 0.1em;
+  }
+
+  .archive-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .archive-file {
+    background: var(--color-paper);
+    border: none;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--neumorph-out-sm);
+    transition:
+      box-shadow 0.3s ease,
+      background 0.3s ease;
+  }
+  .archive-file.unlocked {
+    cursor: pointer;
+  }
+  .archive-file.unlocked:hover {
+    box-shadow: var(--neumorph-in-sm);
+  }
+  .archive-file.locked {
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: var(--neumorph-flat);
+  }
+
+  .file-header {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1.5fr;
+    padding: var(--space-md);
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+  .file-id {
+    color: var(--color-muted);
+  }
+  .file-name {
+    color: var(--color-ink);
+    font-weight: 500;
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+  }
+  .file-status {
+    text-align: right;
+    color: var(--color-accent);
+  }
+
+  .file-body {
+    padding: 0 var(--space-md) var(--space-md);
+    font-size: var(--text-md);
+    line-height: 1.6;
+    color: var(--color-ink-2);
+    display: none;
+  }
+  .archive-file.expanded .file-body {
+    display: block;
+  }
+
+  .reality-toast {
+    position: fixed;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9999;
+    box-shadow: var(--neumorph-out);
+  }
+  .reality-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+
+<script>
+  let typeTimeout;
+
+  document.addEventListener("astro:page-load", () => {
+    /* ── TYPED TEXT EFFECT ── */
+    const phrases = [
+      "A Story.",
+      "A Surrender.",
+      "A Sunrise.",
+      "A Sanctuary.",
+      "A Synthesis.",
+    ];
+    let pi = 0,
+      ci = 0,
+      del = false;
+    const typedEl = document.getElementById("typed-lore");
+
+    if (typeTimeout) clearTimeout(typeTimeout);
+
+    function type() {
+      if (!typedEl) return;
+      const p = phrases[pi];
+      typedEl.textContent = del ? p.slice(0, ci--) : p.slice(0, ci++);
+      if (!del && ci > p.length) {
+        del = true;
+        typeTimeout = setTimeout(type, 1800);
+        return;
+      }
+      if (del && ci < 0) {
+        del = false;
+        ci = 0;
+        pi = (pi + 1) % phrases.length;
+      }
+      typeTimeout = setTimeout(type, del ? 38 : 65);
+    }
+    type();
+
+    /* ── ARCHIVE INTERACTIONS ── */
+    const toast = document.getElementById("realityToast");
+    let toastTimeout;
+
+    function showToast(message) {
+      if (!toast) return;
+      clearTimeout(toastTimeout);
+      toast.textContent = message;
+      toast.classList.add("show");
+      toastTimeout = setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+
+    document.querySelectorAll(".archive-file").forEach((file) => {
+      file.addEventListener("click", function () {
+        if (this.classList.contains("locked")) {
+          showToast("ACCESS DENIED: DATA CORRUPTED");
+          // small shake effect
+          this.style.transform = "translateX(4px)";
+          setTimeout(() => (this.style.transform = "translateX(-4px)"), 50);
+          setTimeout(() => (this.style.transform = "translateX(0)"), 100);
+        } else if (this.classList.contains("unlocked")) {
+          this.classList.toggle("expanded");
+        }
+      });
+    });
+  });
+</script>

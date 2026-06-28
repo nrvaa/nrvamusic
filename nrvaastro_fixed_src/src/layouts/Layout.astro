@@ -325,6 +325,30 @@ html, body {
 	-webkit-font-smoothing: antialiased;
 }
 
+/* Untuk Chrome, Safari, dan Edge */
+html::-webkit-scrollbar {
+  width: 8px; /* Lebar scrollbar */
+}
+
+html::-webkit-scrollbar-track {
+  background: #131388; /* Warna track/background scrollbar (zinc-950) */
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #080850; /* Warna batangan scrollbar (zinc-800) */
+  border-radius: 10px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: #4c1d95; /* Warna saat di-hover (violet-900) */
+}
+
+/* Untuk Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a #09090b;
+}
+
 /* Base typography */
 h1, h2, h3, h4, h5, h6 {
 	font-family: var(--font-display);
